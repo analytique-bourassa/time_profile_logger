@@ -2,8 +2,8 @@ import time
 
 from functools import wraps
 
-from utils.validator import Validator
-from utils.time_profiler_logging import TimeProfilerLogger
+from validator import Validator
+from time_profile_logger.time_profiler_logging import TimeProfilerLogger
 
 class TimerContext:
 
@@ -21,7 +21,7 @@ class TimerContext:
 
     def __enter__(self):
 
-        self.t0 = time.time()
+        self.start_time = time.time()
         return self
 
     def __exit__(self, *args):
@@ -31,19 +31,21 @@ class TimerContext:
             self.logger.add_time(self.name, elapsed_time)
 
         if self.show_time_when_exit:
-            print('Method: %s | Elapsed time: %0.2fs' % (self.name, time.time() - self.t0))
+            print('Method: %s | Elapsed time: %0.2fs' % (self.name, time.time() - self.start_time))
 
     def elapsed_time(self):
 
-        elapsed_time = time.time() - self.t0
+        elapsed_time = time.time() - self.start_time
 
         return elapsed_time
 
 
-def timer_decorator(logger=None):
+def timer_decorator(show_time_elapsed=True, logger=None):
 
     if logger is not None:
         Validator.check_type(logger, TimeProfilerLogger)
+
+    Validator.check_type(show_time_elapsed, bool)
 
     def inner_function(function):
         @wraps(function)
@@ -54,6 +56,8 @@ def timer_decorator(logger=None):
             end_time = time.time()
 
             elapsed_time = end_time - start_time
+            if show_time_elapsed:
+                print('Method: %s | Elapsed time: %0.2fs' % (function.__name__, elapsed_time))
             if logger is not None:
                 logger.add_time(function.__name__, elapsed_time)
 

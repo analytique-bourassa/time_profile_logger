@@ -1,3 +1,5 @@
+import pandas as pd
+
 class TimeProfilerLogger(object):
 
     __instance = None
@@ -23,6 +25,11 @@ class TimeProfilerLogger(object):
             self.times[name] += time
         else:
             self.times[name] = time
+
+    def show_times(self):
+
+        dataframe = pd.Dataframe(self.times)
+        print(dataframe.describe())
 
 
 
