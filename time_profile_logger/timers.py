@@ -2,7 +2,7 @@ import time
 
 from functools import wraps
 
-from validator import Validator
+from time_profile_logger.validator import Validator
 from time_profile_logger.time_profiler_logging import TimeProfilerLogger
 
 class TimerContext:
