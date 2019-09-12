@@ -26,7 +26,7 @@ class TimerContext:
 
     def __exit__(self, *args):
 
-        elapsed_time = time.time() - self.t0
+        elapsed_time = time.time() - self.start_time
         if self.logger is not None:
             self.logger.add_time(self.name, elapsed_time)
 
