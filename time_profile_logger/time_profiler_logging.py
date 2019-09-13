@@ -1,4 +1,6 @@
 import pandas as pd
+pd.set_option('display.width', 400)
+pd.set_option('display.max_columns', 10)
 
 class TimeProfilerLogger(object):
 
