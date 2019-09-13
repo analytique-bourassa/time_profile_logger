@@ -40,28 +40,35 @@ class TimerContext:
         return elapsed_time
 
 
-def timer_decorator(show_time_elapsed=True, logger=None):
+class timer_decorator(object):
 
-    if logger is not None:
-        Validator.check_type(logger, TimeProfilerLogger)
+    def __init__(self, show_time_elapsed=True, logger=None):
+        """
+        If there are decorator arguments, the function
+        to be decorated is not passed to the constructor!
+        """
+        print("Inside __init__()")
+        self.show_time_elapsed = show_time_elapsed
+        self.logger = logger
 
-    Validator.check_type(show_time_elapsed, bool)
+    def __call__(self, function):
 
-    def inner_function(function):
-        @wraps(function)
-        def wrapper(*args, **kwargs):
+        def wrapped_function(*args, **kwargs):
 
             start_time = time.time()
-            function(*args, **kwargs)
+            result = function(*args, **kwargs)
             end_time = time.time()
 
             elapsed_time = end_time - start_time
-            if show_time_elapsed:
+            if self.show_time_elapsed:
                 print('Method: %s | Elapsed time: %0.2fs' % (function.__name__, elapsed_time))
-            if logger is not None:
-                logger.add_time(function.__name__, elapsed_time)
 
-        return wrapper
+            print("in wrapped function")
+            if self.logger is not None:
+                self.logger.add_time(function.__name__, elapsed_time)
 
-    return inner_function
+            return result
+
+        return wrapped_function
+
 
