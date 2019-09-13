@@ -28,7 +28,7 @@ class TimeProfilerLogger(object):
 
     def show_times(self):
 
-        dataframe = pd.Dataframe(self.times)
+        dataframe = pd.DataFrame(self.times)
         print(dataframe.describe())
 
 
