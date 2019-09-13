@@ -7,7 +7,7 @@ from time_profile_logger.time_profiler_logging import TimeProfilerLogger
 
 class TimerContext:
 
-    def __init__(self, name, show_time_when_exit=True, logger=None):
+    def __init__(self, name, show_time_when_exit=False, logger=None):
 
         Validator.check_type(name, str)
         Validator.check_type(show_time_when_exit, bool)
@@ -42,12 +42,8 @@ class TimerContext:
 
 class timer_decorator(object):
 
-    def __init__(self, show_time_elapsed=True, logger=None):
-        """
-        If there are decorator arguments, the function
-        to be decorated is not passed to the constructor!
-        """
-        print("Inside __init__()")
+    def __init__(self, show_time_elapsed=False, logger=None):
+
         self.show_time_elapsed = show_time_elapsed
         self.logger = logger
 
@@ -63,7 +59,6 @@ class timer_decorator(object):
             if self.show_time_elapsed:
                 print('Method: %s | Elapsed time: %0.2fs' % (function.__name__, elapsed_time))
 
-            print("in wrapped function")
             if self.logger is not None:
                 self.logger.add_time(function.__name__, elapsed_time)
 
